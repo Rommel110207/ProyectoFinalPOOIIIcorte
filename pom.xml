@@ -101,10 +101,20 @@
 			<version>5.0.11.java8</version>
 		</dependency>
 		-->
+
+		<!--
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<version>12.4.2.jre11</version>
+		</dependency>
+		-->
+
+		<!-- Driver JDBC para conectar con PostgreSQL -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.7.2</version>
 		</dependency>
 
 		<!-- Source: https://mvnrepository.com/artifact/org.projectlombok/lombok -->
