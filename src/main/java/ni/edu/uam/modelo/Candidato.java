@@ -1,28 +1,37 @@
 package ni.edu.uam.modelo;
 
 import javax.persistence.*;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.openxava.annotations.*;
+import lombok.*;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
-@ToString
+public class RespuestaDetalle {
 
-public class Candidato {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Hidden
+    private long idRespuestaDetalle;
 
-    @Id @Column(length=20)
-    private String cedula;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Evaluacion evaluacion;
 
-    @Column(length=50) @Required
-    private String nombre;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @DescriptionsList(descriptionProperties = "enunciado")
+    private Pregunta pregunta;
 
-    @Column(length=50) @Required
-    private String apellidos;
+    @Column(length = 5)
+    private String respuestaSeleccionada;
 
-    // Getters y Setters
+    @ReadOnly // Calculado por el sistema
+    private boolean esCorrecta;
+
+    // Métodos
+    public void registrarRespuesta(String respuesta) {
+        this.respuestaSeleccionada = respuesta;
+    }
+
+    public void marcarComoCorrecta(boolean correcta) {
+        this.esCorrecta = correcta;
+    }
 }
