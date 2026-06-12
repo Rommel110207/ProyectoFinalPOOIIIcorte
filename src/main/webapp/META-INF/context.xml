@@ -4,7 +4,15 @@
 
 	<JarScanner scanClassPath="false" />
 	<CookieProcessor sameSiteCookies="lax" /> <!-- Para cumplir con OWASP -->
-	
+
+
+	<controller name="EvaluacionController">
+		<extends controller="Typical"/>
+		<action name="calcularNota"
+		        class="ni.edu.uam.acciones.CalcularNotaFinalAction"
+		        mode="detail"
+		        icon="calculator"/>
+	</controller>
 	<!-- 
 	Para definir el acceso a tu base de datos descomenta una de las
 	configuraciones de abajo. Si no encuentras la tuya, busca en internet
