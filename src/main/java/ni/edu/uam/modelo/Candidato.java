@@ -24,9 +24,9 @@ public class Candidato {
     @ListProperties("idEvaluacion, fechaInicio, estado, notaFinal")
     private Collection<Evaluacion> evaluaciones;
 
-    // Método definido en tu UML
+
     public boolean validarIdentificacion(String identificacion) {
-        // Lógica de validación (ej. formato de cédula)
+
         return this.identificacion != null && !this.identificacion.trim().isEmpty();
     }
 }
