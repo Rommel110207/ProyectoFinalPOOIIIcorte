@@ -1,28 +1,32 @@
 package ni.edu.uam.modelo;
 
 import javax.persistence.*;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.openxava.annotations.*;
+import lombok.*;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
-@ToString
+public class Pregunta {
 
-public class Candidato {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Hidden
+    private long idPregunta;
 
-    @Id @Column(length=20)
-    private String cedula;
+    @Column(length = 255, required = true)
+    private String enunciado;
 
-    @Column(length=50) @Required
-    private String nombre;
+    @Column(required = true)
+    private double puntajeBase;
 
-    @Column(length=50) @Required
-    private String apellidos;
+    // Campo inferido necesario para la lógica del método del UML
+    @Column(length = 5)
+    @Required
+    private String respuestaCorrecta;
 
-    // Getters y Setters
+    // Método
+    public boolean verificarRespuestaCorrecta(String respuestaSeleccionada) {
+        if (this.respuestaCorrecta == null || respuestaSeleccionada == null) return false;
+        return this.respuestaCorrecta.equalsIgnoreCase(respuestaSeleccionada);
+    }
 }
