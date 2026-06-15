@@ -3,30 +3,30 @@ package ni.edu.uam.modelo;
 import javax.persistence.*;
 import org.openxava.annotations.*;
 import lombok.*;
-import java.util.Collection;
 
 @Entity
 @Getter @Setter
-public class Candidato {
+public class Pregunta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Hidden // Oculto en la vista del usuario
-    private long idCandidato;
+    @Hidden
+    private long idPregunta;
 
-    @Column(length = 20, required = true)
-    private String identificacion;
+    @Column(length = 255, required = true)
+    private String enunciado;
 
-    @Column(length = 100, required = true)
-    private String nombre;
+    @Column(required = true)
+    private double puntajeBase;
 
-    @OneToMany(mappedBy = "candidato")
-    @ListProperties("idEvaluacion, fechaInicio, estado, notaFinal")
-    private Collection<Evaluacion> evaluaciones;
+    // Campo inferido necesario para la lógica del método del UML
+    @Column(length = 5)
+    @Required
+    private String respuestaCorrecta;
 
-
-    public boolean validarIdentificacion(String identificacion) {
-
-        return this.identificacion != null && !this.identificacion.trim().isEmpty();
+    // Método
+    public boolean verificarRespuestaCorrecta(String respuestaSeleccionada) {
+        if (this.respuestaCorrecta == null || respuestaSeleccionada == null) return false;
+        return this.respuestaCorrecta.equalsIgnoreCase(respuestaSeleccionada);
     }
 }
