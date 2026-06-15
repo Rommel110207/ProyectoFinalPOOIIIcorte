@@ -6,27 +6,32 @@ import lombok.*;
 
 @Entity
 @Getter @Setter
-public class Pregunta {
+public class RespuestaDetalle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Hidden
-    private long idPregunta;
+    private long idRespuestaDetalle;
 
-    @Column(length = 255, required = true)
-    private String enunciado;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Evaluacion evaluacion;
 
-    @Column(required = true)
-    private double puntajeBase;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @DescriptionsList(descriptionProperties = "enunciado")
+    private Pregunta pregunta;
 
-    // Campo inferido necesario para la lógica del método del UML
     @Column(length = 5)
-    @Required
-    private String respuestaCorrecta;
+    private String respuestaSeleccionada;
 
-    // Método
-    public boolean verificarRespuestaCorrecta(String respuestaSeleccionada) {
-        if (this.respuestaCorrecta == null || respuestaSeleccionada == null) return false;
-        return this.respuestaCorrecta.equalsIgnoreCase(respuestaSeleccionada);
+    @ReadOnly // Calculado por el sistema
+    private boolean esCorrecta;
+
+    // Métodos
+    public void registrarRespuesta(String respuesta) {
+        this.respuestaSeleccionada = respuesta;
+    }
+
+    public void marcarComoCorrecta(boolean correcta) {
+        this.esCorrecta = correcta;
     }
 }
