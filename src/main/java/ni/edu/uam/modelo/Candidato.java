@@ -1,28 +1,32 @@
 package ni.edu.uam.modelo;
 
 import javax.persistence.*;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.openxava.annotations.*;
+import lombok.*;
+import java.util.Collection;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
-@ToString
-
 public class Candidato {
 
-    @Id @Column(length=20)
-    private String cedula;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Hidden // Oculto en la vista del usuario
+    private long idCandidato;
 
-    @Column(length=50) @Required
+    @Column(length = 20, required = true)
+    private String identificacion;
+
+    @Column(length = 100, required = true)
     private String nombre;
 
-    @Column(length=50) @Required
-    private String apellidos;
+    @OneToMany(mappedBy = "candidato")
+    @ListProperties("idEvaluacion, fechaInicio, estado, notaFinal")
+    private Collection<Evaluacion> evaluaciones;
 
-    // Getters y Setters
+
+    public boolean validarIdentificacion(String identificacion) {
+
+        return this.identificacion != null && !this.identificacion.trim().isEmpty();
+    }
 }
