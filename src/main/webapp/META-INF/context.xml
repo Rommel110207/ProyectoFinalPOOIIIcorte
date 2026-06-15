@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Context>
+	<Resource name="jdbc/LadrillosyCubos"
+	          auth="Container"
+	          type="javax.sql.DataSource"
+	          maxTotal="20"
+	          maxIdle="10"
+	          maxWaitMillis="-1"
+	          username="postgres"
+	          password="1234"
+	          driverClassName="org.postgresql.Driver"
+	          url="jdbc:postgresql://localhost:5432/Ladrillos_CubosDB"/>
 
 	<JarScanner scanClassPath="false" />
 	<CookieProcessor sameSiteCookies="lax" /> <!-- Para cumplir con OWASP -->
