@@ -38,15 +38,21 @@
 	      username="root" password="" 
 	      driverClassName="com.mysql.cj.jdbc.Driver"
 	      url="jdbc:mysql://localhost:3306/ProyectoFinalIICortedb"/>	      
-	-->      
-	
-	<!-- PostgreSQL 
-	<Resource name="jdbc/ProyectoFinalIICorteDS" auth="Container" type="javax.sql.DataSource"
-	      maxTotal="20" maxIdle="5" maxWaitMillis="10000"
-	      username="postgres" password="" 
-	      driverClassName="org.postgresql.Driver" 
-	      url="jdbc:postgresql://localhost/ProyectoFinalIICortedb"/>
 	-->
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<Context>
+		<Resource name="jdbc/ProyectoFinalIICorteDS"
+		          auth="Container"
+		          type="javax.sql.DataSource"
+		          maxTotal="20"
+		          maxIdle="5"
+		          maxWaitMillis="10000"
+		          username="postgres"
+		          password="TU_CONTRASEÑA_DE_PGADMIN"
+		          driverClassName="org.postgresql.Driver"
+		          url="jdbc:postgresql://localhost:5432/ProyectoFinalIICortedb"/>
+	</Context>
 	
 	<!-- Oracle 
 	<Resource name="jdbc/ProyectoFinalIICorteDS" auth="Container" type="javax.sql.DataSource"

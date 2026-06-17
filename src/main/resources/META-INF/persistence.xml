@@ -5,25 +5,20 @@
              version="2.0">
 
 	<persistence-unit name="default">
+		<non-jta-data-source>java:comp/env/jdbc/ProyectoFinalIICorteDS</non-jta-data-source>
 
-		<non-jta-data-source>java:comp/env/jdbc/TuProyectoDS</non-jta-data-source>
-
-		<class>com.ni.edu.uam.modelo.Candidato</class>
-		<class>com.ni.edu.uam.modelo.Pregunta</class>
-		<class>com.ni.edu.uam.modelo.Evaluacion</class>
-		<class>com.ni.edu.uam.modelo.RespuestaDetalle</class>
+		<class>ni.edu.uam.modelo.Candidato</class>
+		<class>ni.edu.uam.modelo.Pregunta</class>
+		<class>ni.edu.uam.modelo.Evaluacion</class>
+		<class>ni.edu.uam.modelo.RespuestaDetalle</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
-
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.format_sql" value="true"/>
 			<property name="hibernate.use_sql_comments" value="false"/>
-
 			<property name="hibernate.connection.release_mode" value="auto"/>
 		</properties>
-
 	</persistence-unit>
 </persistence>
