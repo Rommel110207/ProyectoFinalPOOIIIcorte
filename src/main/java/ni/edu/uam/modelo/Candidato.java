@@ -3,35 +3,32 @@ package ni.edu.uam.modelo;
 import javax.persistence.*;
 import org.openxava.annotations.*;
 import lombok.*;
+import java.util.Collection;
 
 @Entity
 @Getter @Setter
-public class RespuestaDetalle {
+@NoArgsConstructor // Constructor vacío obligatorio para JPA
+@AllArgsConstructor // Constructor con todos los campos
+public class Candidato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Hidden
-    private long idRespuestaDetalle;
+    @Hidden // Oculto en la vista del usuario en el panel
+    private long idCandidato;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Evaluacion evaluacion;
+    // Se cambió 'required = true' por 'nullable = false' para corregir el error de compilación
+    @Column(length = 20, nullable = false)
+    @Required // Esto ya maneja la validación obligatoria en la web de OpenXava
+    private String identificacion;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @DescriptionsList(descriptionProperties = "enunciado")
-    private Pregunta pregunta;
+    // Se corrigió también aquí para evitar el mismo error en el campo nombre
+    @Column(length = 100, nullable = false)
+    @Required
+    private String nombre;
 
-    @Column(length = 5)
-    private String respuestaSeleccionada;
+    // Relación bidireccional con las evaluaciones que realice este candidato
+    @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL)
+    @ListProperties("id, fecha, puntajeTotal") // Ajustado a las variables reales de tus compañeros
+    private Collection<Evaluacion> evaluaciones;
 
-    @ReadOnly // Calculado por el sistema
-    private boolean esCorrecta;
-
-    // Métodos
-    public void registrarRespuesta(String respuesta) {
-        this.respuestaSeleccionada = respuesta;
-    }
-
-    public void marcarComoCorrecta(boolean correcta) {
-        this.esCorrecta = correcta;
-    }
 }

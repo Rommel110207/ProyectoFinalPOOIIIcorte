@@ -1,23 +1,25 @@
 package ni.edu.uam.modelo;
-import javax.persistence.*;
+
+import lombok.*;
 import org.openxava.annotations.*;
-import lombok.Getter;
-import lombok.Setter;
-    @Entity
-    @Getter @Setter
-    public class Pregunta {
+import javax.persistence.*;
 
-        @Id
-        private Integer numeroPregunta;
+@Entity
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Pregunta {
 
-        @Stereotype("PHOTO")
-        private byte[] imagenLadrillos;
+    @Id
+    private Integer numeroPregunta;
 
-        @Column(length = 1) @Required
-        private String respuestaCorrecta;
+    @Stereotype("PHOTO")
+    private byte[] imagenLadrillos;
 
-    }
-
+    @Column(length = 1)
+    @Required
+    private String respuestaCorrecta;
+}
 
 
 

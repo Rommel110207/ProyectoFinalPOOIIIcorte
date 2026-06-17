@@ -1,3 +1,5 @@
+package ni.edu.uam.modelo;
+
 import javax.persistence.*;
 import org.openxava.annotations.*;
 import lombok.Getter;
