@@ -7,28 +7,26 @@ import java.util.Collection;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor // Constructor vacío obligatorio para JPA
-@AllArgsConstructor // Constructor con todos los campos
+@NoArgsConstructor
+@AllArgsConstructor
 public class Candidato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Hidden // Oculto en la vista del usuario en el panel
+    @Hidden
     private long idCandidato;
 
-    // Se cambió 'required = true' por 'nullable = false' para corregir el error de compilación
     @Column(length = 20, nullable = false)
-    @Required // Esto ya maneja la validación obligatoria en la web de OpenXava
+    @Required
     private String identificacion;
 
-    // Se corrigió también aquí para evitar el mismo error en el campo nombre
     @Column(length = 100, nullable = false)
     @Required
     private String nombre;
 
-    // Relación bidireccional con las evaluaciones que realice este candidato
+    // ? AQUÍ SE CORRIGIÓ: Cambiamos 'idEvaluacion' por 'id' para que coincida con la clase de tu compañera
     @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL)
-    @ListProperties("id, fecha, puntajeTotal") // Ajustado a las variables reales de tus compañeros
+    @ListProperties("id, fecha, puntajeTotal")
     private Collection<Evaluacion> evaluaciones;
 
 }
