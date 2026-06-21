@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFA - Test de Aptitud Espacial</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-layer-group"></i>
+                <span>BFA Sistema</span>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <button class="sidebar-item active" onclick="navegarA('screen-login')">
+                    <i class="fas fa-globe"></i>
+                    <span>INICIO</span>
+                </button>
+                <button class="sidebar-item" id="sidebar-lnk-resultados" onclick="irResultados()">
+                    <i class="fas fa-user"></i>
+                    <span>RESULTADOS</span>
+                </button>
+                <button class="sidebar-item" onclick="toggleProfileModal()">
+                    <i class="fas fa-user-cog"></i>
+                    <span>PERFIL</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar-mini">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info-mini">
+                    <span id="sb-user-name">Invitado</span>
+                </div>
+                <button class="logout-btn" onclick="location.reload()" title="Salir">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            
+            <header class="top-header">
+                <div class="header-right">
+                    <div class="theme-toggle-wrapper">
+                        <input type="checkbox" id="theme-checkbox">
+                        <label for="theme-checkbox" class="theme-label">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                            <span class="theme-ball"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="user-profile-tag hidden" id="user-profile">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="profile-details">
+                            <strong id="header-user-name"></strong>
+                            <span id="header-user-cif"></span>
+                        </div>
+                        <i class="fas fa-chevron-down drop-icon"></i>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-wrapper">
+                
+                <section id="screen-login" class="glass-card split-design active">
+                    <div class="side-info">
+                        <h1>BFA</h1>
+                        <p>Sistema de Evaluación Psicotécnica</p>
+                        <div class="brand-icon"><i class="fas fa-layer-group"></i></div>
+                    </div>
+                    <div class="side-form">
+                        <h2>Iniciar Sesión</h2>
+                        <form id="form-registro">
+                            <div class="input-group">
+                                <input type="text" id="nombre" placeholder="Nombre Completo" required autocomplete="off">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="cif" placeholder="Identificación" required autocomplete="off">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <button type="submit" class="btn-main">CONTINUAR</button>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="screen-instructions" class="glass-card hidden">
+                    <div class="content-padding">
+                        <h2>Instrucciones</h2>
+                        <div class="scroll-box">
+                            <p>Usted va a encontrar, en las páginas siguientes, diversos ejercicios. En cada uno de ellos hay un montón de ladrillos o cubos y cinco posibles respuestas marcadas con las letras A, B, C, D y E; una de las cuales corresponde al número exacto de ladrillos o cubos que existen en el montón.</p>
+                            <br>
+                            <p>Usted deberá averiguar la solución correcta, teniendo igualmente en cuenta aquellos ladrillos o cubos que están ocultos. Hay una sola respuesta correcta en cada ejercicio.</p>
+                            <br>
+                            <p>Si usted se equivoca, simplemente marque la nueva respuesta seleccionando otra opción en la pantalla.</p>
+                            
+                            <div class="alert-box">
+                                <i class="fas fa-clock"></i>
+                                <span>Dispondrá de <strong>3 minutos 30 segundos</strong> para hacer esta prueba. Procure hacer el máximo de ejercicios trabajando lo más rápidamente que pueda, sin perder tiempo. Si no encuentra la solución a un ejercicio pase al siguiente; usted puede intentar resolverlo al final si dispone de tiempo.</span>
+                            </div>
+                        </div>
+                        <button id="btn-start-test" class="btn-main">EMPEZAR TEST</button>
+                    </div>
+                </section>
+
+                <section id="screen-test" class="glass-card test-layout hidden">
+                    <div class="test-header">
+                        <div id="cronometro">03:30</div>
+                        <div class="progress-container">
+                            <div id="progress-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="test-main-container">
+                        <div class="test-grid">
+                            <div class="image-area">
+                                <h3 id="num-ejercicio">Pregunta -51-</h3>
+                                <div class="img-container">
+                                    <img id="img-cubos" src="51.png" alt="Cargando estímulo visual...">
+                                </div>
+                            </div>
+                            <div class="options-area" id="box-opciones"></div>
+                        </div>
+                        
+                        <div class="navigation-sidebar">
+                            <h4>Ejercicios</h4>
+                            <div class="questions-nav-grid" id="nav-matrix"></div>
+                            <div class="nav-legend">
+                                <div><span class="dot current"></span> Actual</div>
+                                <div><span class="dot answered"></span> Respondido</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="test-footer-actions">
+                        <button id="btn-prev" class="btn-secondary-action">ANTERIOR</button>
+                        <button id="btn-next" class="btn-main">SIGUIENTE PREGUNTA</button>
+                    </div>
+                </section>
+
+                <section id="screen-results" class="glass-card hidden">
+                    <div class="result-content">
+                        <div class="success-icon"><i class="fas fa-check-double"></i></div>
+                        <h2>Evaluación Completada</h2>
+                        <p id="res-nombre" style="font-weight:700; font-size:1.2rem; color:var(--primary);"></p>
+                        <div class="score-circle">
+                            <span id="puntos">0</span>
+                            <small id="total-q">/ 15</small>
+                        </div>
+                        <p class="rank-msg" id="mensaje-r"></p>
+                        <button onclick="location.reload()" class="btn-outline">SALIR DEL SISTEMA</button>
+                    </div>
+                </section>
+                
+            </main>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal hidden">
+
+        <div class="modal-content glass-card">
+
+            <h3>Perfil del Usuario</h3>
+
+            <p style="margin-bottom:20px;
+            color:var(--text-muted);">
+            Información del usuario registrado.
+            </p>
+
+
+            <div class="profile-info">
+
+                <div>
+                    <i class="fas fa-user"></i>
+                    <strong>Nombre:</strong>
+                    <span id="profile-name">
+                    No registrado
+                    </span>
+                </div>
+
+
+            <div>
+                <i class="fas fa-id-card"></i>
+                <strong>Identificación:</strong>
+                <span id="profile-id">
+                No registrada
+                </span>
+            </div>
+
+        </div>
+
+        <button 
+        class="btn-main"
+        onclick="toggleProfileModal()">
+
+        Cerrar
+
+        </button>
+
+    </div>
+
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="app.js"></script>
+</body>
+</html>
