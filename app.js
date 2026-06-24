@@ -23,63 +23,103 @@ let respuestasUsuario = new Array(banco.length).fill("");
 let evaluacionTerminada = false;
 let terminoPrueba = false;
 
+// Referencia global al menú colapsable lateral de ejercicios (Menú Oculto)
+const sidebarNavigation = document.getElementById('sidebar-navigation');
+
 // Control del Switch de Modo Claro / Oscuro moderno
 document.getElementById('theme-checkbox').addEventListener('change', (e) => {
     document.documentElement.setAttribute('data-theme', e.target.checked ? 'dark' : 'light');
 });
 
+// Enviar Registro con Validación Remota en Base de Datos PostgreSQL
 // Enviar Registro actualizando las credenciales visuales superiores e inferiores
 document.getElementById('form-registro').onsubmit = (e) => {
     e.preventDefault();
 
-    const nombreCap = document.getElementById('nombre').value;
-    const cifCap = document.getElementById('cif').value;
+    const nombreCap = document.getElementById('nombre').value.trim();
+    const cifCap = document.getElementById('cif').value.trim();
     
-    if(nombreCap === "" || cifCap === ""){
-
+    if (nombreCap === "" || cifCap === "") {
         Swal.fire({
-
             icon: 'warning',
-
             title: 'Datos incompletos',
-
             text: 'Por favor ingrese su nombre completo y su identificación.',
-
             confirmButtonColor: '#26C3D7'
-
         });
         return;
     }
-    // Actualizar información del usuario
-    document.getElementById('sb-user-name').innerText = nombreCap;
-    document.getElementById('profile-name').innerText = nombreCap;
-    document.getElementById('profile-id').innerText = cifCap;
 
+    // Alerta de carga
     Swal.fire({
-
-        icon: 'success',
-
-        title: `¡Bienvenido, ${nombreCap}!`,
-
-        text: 'Sus datos fueron ingresados correctamente. Está listo para iniciar la evaluación psicotécnica.',
-
-        confirmButtonText: 'Continuar',
-
-        confirmButtonColor: '#26C3D7',
-
-        timer: 4000,
-
-        timerProgressBar: true
-
-    }).then(() => {
-
-
-        cambiarPantalla(
-            'screen-login',
-            'screen-instructions'
-        );
+        title: 'Verificando Candidato...',
+        text: 'Buscando credenciales en el sistema PostgreSQL.',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
     });
 
+    // URL corregida con las variables exactas: nombreCap y cifCap
+    // Petición Fetch hacia el Servlet
+    const urlApi = `http://localhost:8080/ProyectoFinalIICorte/api/validar-candidato?nombre=${encodeURIComponent(nombreCap)}&cif=${encodeURIComponent(cifCap)}`;
+
+    fetch(urlApi)
+        .then(response => {
+            // Guardamos el estado para saber si vino un error del servidor
+            const esOk = response.ok;
+            
+            return response.json().then(data => {
+                if (!esOk) {
+                    // Si el servidor mandó un error (como el de la base de datos), lanzamos el mensaje real
+                    throw new Error(data.error || 'Error interno del servidor backend');
+                }
+                return data;
+            });
+        })
+        .then(data => {
+            Swal.close(); // Cerrar animación de carga
+
+            if (data.registrado === true) {
+                // Si el candidato existe en la base de datos, avanzamos
+                document.getElementById('sb-user-name').innerText = nombreCap;
+                document.getElementById('profile-name').innerText = nombreCap;
+                document.getElementById('profile-id').innerText = cifCap;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: `¡Bienvenido, ${nombreCap}!`,
+                    text: 'Sus datos fueron validados correctamente. Está listo para iniciar la evaluación.',
+                    confirmButtonText: 'Continuar',
+                    confirmButtonColor: '#26C3D7',
+                    timer: 4000,
+                    timerProgressBar: true
+                }).then(() => {
+                    cambiarPantalla('screen-login', 'screen-instructions');
+                });
+            } else {
+                // Si no se encuentra registrado
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Acceso Denegado',
+                    text: 'El nombre o número de identificación no coinciden con ningún candidato registrado.',
+                    confirmButtonColor: '#ef4444'
+                });
+            }
+        })
+        .catch(error => {
+            Swal.close();
+            console.error("Detalle del error:", error);
+            
+            // Alerta inteligente: te dirá si es problema de red o el error exacto de Java
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de Comunicación',
+                text: error.message.includes('Fetch') || error.message.includes('NetworkError')
+                    ? 'No se pudo conectar con el servidor. Asegúrese de que Tomcat esté encendido.'
+                    : `Detalle: ${error.message}`,
+                confirmButtonColor: '#f59e0b'
+            });
+        });
 };
 
 // Empezar Test Oficial
@@ -108,13 +148,8 @@ function navegarA(pantallaId) {
         pantallaId === 'screen-results' &&
         !terminoPrueba
     ){
-
-        alert(
-        "Aún no has completado la evaluación."
-        );
-
+        alert("Aún no has completado la evaluación.");
         return;
-
     }
     // Si está haciendo el test, bloquear salidas accidentales desde la barra lateral
     if(!document.getElementById('screen-test').classList.contains('hidden') && pantallaId !== 'screen-test') {
@@ -144,28 +179,17 @@ function actualizarSidebarActivo(idActivo) {
 
 // Ventana Modal de Perfil de usuario
 function toggleProfileModal(){
-    document
-    .getElementById('profile-modal')
-    .classList.toggle('hidden');
+    document.getElementById('profile-modal').classList.toggle('hidden');
 }
 
 function cambiarAccesibilidad(size, boton) {
-
-    document.body.classList.remove(
-        'font-small',
-        'font-medium',
-        'font-large'
-    );
-
+    document.body.classList.remove('font-small', 'font-medium', 'font-large');
     document.body.classList.add(`font-${size}`);
-
-    document.querySelectorAll('.size-buttons button')
-    .forEach(b => b.classList.remove('active'));
-
+    document.querySelectorAll('.size-buttons button').forEach(b => b.classList.remove('active'));
     boton.classList.add('active');
 }
 
-// Generar dinámicamente los botones del menú lateral derecho
+// Generar dinámicamente los botones del menú lateral derecho (Oculto)
 function inicializarMatrizNavegacion() {
     const matrixContainer = document.getElementById('nav-matrix');
     matrixContainer.innerHTML = "";
@@ -179,6 +203,11 @@ function inicializarMatrizNavegacion() {
         btn.onclick = () => {
             index = i;
             cargarPregunta();
+            
+            // Colapsar y ocultar el menú de ejercicios automáticamente al saltar a una pregunta
+            if (sidebarNavigation) {
+                sidebarNavigation.classList.add('collapsed');
+            }
         };
         matrixContainer.appendChild(btn);
     });
@@ -270,8 +299,10 @@ function startTimer() {
     }, 1000);
 }
 
+// Finalización y cálculo del puntaje final
 function finalizar() {
     evaluacionTerminada = true;
+    terminoPrueba = true; // Sincroniza el flag para permitir la navegación de la barra lateral izquierda
     
     clearInterval(timer);
     cambiarPantalla('screen-test', 'screen-results');
@@ -294,46 +325,41 @@ function finalizar() {
     document.getElementById('mensaje-r').innerText = msg;
 }
 
+// Control del menú principal izquierdo (Colapsable básico)
 function toggleSidebar(){
-
-    const sidebar=document.querySelector('.sidebar');
-    const button=document.querySelector('.sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const button = document.querySelector('.sidebar-toggle');
 
     sidebar.classList.toggle('collapsed');
 
-
     if(sidebar.classList.contains('collapsed')){
-
-        button.style.left="70px";
-
+        button.style.left = "70px";
     }else{
-
-        button.style.left="250px";
-
+        button.style.left = "250px";
     }
-
 }
 
 function irResultados(){
-
     if(!evaluacionTerminada){
-
         Swal.fire({
-
             icon: "info",
-
             title: "Resultados no disponibles",
-
             text: "Debes completar la evaluación psicotécnica antes de consultar tus resultados.",
-
             confirmButtonText: "Entendido",
-
             confirmButtonColor: "#26C3D7"
-
         });
-
         return;
     }
-
     navegarA('screen-results');
+}
+
+// Listeners adicionales opcionales para control manual de apertura/cierre de la barra de ejercicios
+const btnToggleNav = document.getElementById('btn-toggle-nav');
+const btnCloseSidebar = document.getElementById('btn-close-sidebar');
+
+if (btnToggleNav && sidebarNavigation) {
+    btnToggleNav.onclick = () => sidebarNavigation.classList.remove('collapsed');
+}
+if (btnCloseSidebar && sidebarNavigation) {
+    btnCloseSidebar.onclick = () => sidebarNavigation.classList.add('collapsed');
 }
