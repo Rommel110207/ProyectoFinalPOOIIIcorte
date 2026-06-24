@@ -2,7 +2,7 @@
 
 <!DOCTYPE aplicacion SYSTEM "dtds/aplicacion.dtd">
 
-<aplicacion nombre="ProyectoFinalIIICorte">
+<aplicacion nombre="ProyectoFinalIICorte">
 	
 	<!--
 	Un módulo por defecto se asume para cada
