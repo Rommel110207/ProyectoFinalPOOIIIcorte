@@ -2,7 +2,7 @@
 
 <!DOCTYPE aplicacion SYSTEM "dtds/aplicacion.dtd">
 
-<aplicacion nombre="ProyectoFinalIICorte"> 
+<aplicacion nombre="ProyectoFinalIIICorte">
 	
 	<!--
 	Un módulo por defecto se asume para cada
@@ -11,6 +11,11 @@
 	<modulo-defecto>		  
 		<controlador nombre="Typical"/>		
 	</modulo-defecto>
+
+	<modulo nombre="Evaluacion">
+		<modelo nombre="Evaluacion"/>
+		<controlador nombre="EvaluacionController"/>
+	</modulo>
 	
 	<!--
 	Podemos definir módulos adicionales, por ejemplo: 	

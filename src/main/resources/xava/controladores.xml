@@ -14,7 +14,14 @@ https://github.com/openxava/openxava/blob/master/openxavatest/src/main/resources
 -->
 
 <controladores>
-    
+    <controlador nombre="EvaluacionController">
+        <hereda-de controlador="Typical"/>
+
+        <accion nombre="calcularNota"
+                etiqueta="Calcular Nota Final"
+                clase="ni.edu.uam.acciones.CalcularNotaFinalAction"
+                modo="detail"/>
+    </controlador>
     <!-- Variable de entorno: 
     <var-entorno nombre="ProyectoFinalIICorte_ANYO_DEFECTO" valor="2015"/>
     -->

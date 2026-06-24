@@ -16,9 +16,14 @@ public class Pregunta {
     @Stereotype("PHOTO")
     private byte[] imagenLadrillos;
 
-    @Column(length = 1)
     @Required
-    private String respuestaCorrecta;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 1)
+    private  IncisoCorrecto respuestaCorrecta;
+
+    public enum IncisoCorrecto {
+        A, B, C, D, E
+    }
 }
 
 

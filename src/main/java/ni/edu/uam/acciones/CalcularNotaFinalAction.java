@@ -43,14 +43,16 @@ public class CalcularNotaFinalAction extends ViewBaseAction {
         for (RespuestaDetalle detalle : evaluacion.getRespuestas()) {
             if (detalle.getPregunta() != null && detalle.getLetraSeleccionada() != null) {
 
-                // Compara lo que marcó el candidato contra la respuesta correcta de la base de datos
-                String correcta = detalle.getPregunta().getRespuestaCorrecta();
+                // Extraemos el valor del enum como texto (.name()) para compararlo
+                String correcta = detalle.getPregunta().getRespuestaCorrecta() != null
+                        ? detalle.getPregunta().getRespuestaCorrecta().name()
+                        : null;
+
                 boolean esCorrecta = correcta != null && correcta.equalsIgnoreCase(detalle.getLetraSeleccionada());
 
-                // Asigna el resultado booleano al detalle (Variable de Eddy)
+                // Guarda el resultado (vuelve el check VERDE si coincide)
                 detalle.setEsCorrecta(esCorrecta);
 
-                // Sistema de puntuación estándar (1 punto por respuesta correcta)
                 if (esCorrecta) {
                     acumulado += 1;
                 }
